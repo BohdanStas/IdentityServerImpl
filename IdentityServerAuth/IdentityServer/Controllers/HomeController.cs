@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer.Models;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 
 namespace IdentityServer.Controllers
@@ -16,10 +17,16 @@ namespace IdentityServer.Controllers
 
         private readonly SignInManager<IdentityUser> signInManager;
 
-        public HomeController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        private readonly IIdentityServerInteractionService interactionService;
+
+        public HomeController(
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager,
+            IIdentityServerInteractionService interactionService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.interactionService = interactionService;
         }
 
         [HttpGet]
@@ -53,6 +60,16 @@ namespace IdentityServer.Controllers
             }
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Logout(string logoutId)
+        {
+            await this.signInManager.SignOutAsync();
+            var result = await this.interactionService.GetLogoutContextAsync(logoutId);
+
+            return Redirect(result.PostLogoutRedirectUri);
+
         }
 
     }

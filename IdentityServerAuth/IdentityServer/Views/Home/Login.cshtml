@@ -1,4 +1,29 @@
 ﻿@{
     ViewData["Title"] = "Login";
 }
+@model LoginViewModel
 
+<h1>Login</h1>
+
+<form method="post" asp-action="Login" asp-controller="Home">
+
+    <div asp-validation-summary="All"></div>
+    <input type="hidden" asp-for="ReturnUrl" value="@Context.Request.Query["ReturnUrl"].SingleOrDefault()" />
+
+    <div class="form-group">
+        <label for="login">Login:</label>
+        <input class="form-control" type="text" asp-for="UserName" id="login" placeholder="Enter user name" />
+        <span asp-validation-for="UserName"></span>
+    </div>
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" asp-for="Password" id="password" class="form-control" placeholder="password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Login</button>
+
+</form>
+
+<p>Login: test</p>
+<p>Password: Pa$$w0rd</p>

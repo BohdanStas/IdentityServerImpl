@@ -1,9 +1,6 @@
 ﻿using IdentityServer4.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using IdentityModel;
 using IdentityServer4;
 
 namespace IdentityServer
@@ -30,19 +27,20 @@ namespace IdentityServer
                 {
                 new Client()
                 {
-                    // uses for identification client app
-                    ClientId = "client_id_mvc",
-                    ClientSecrets = {new Secret("client_secret_mvc".ToSha256())},
-
-                    // the way of retrieving access token
-                    AllowedGrantTypes = GrantTypes.Code, // code???
+                    ClientId = "client_id_react",
+                    RequireClientSecret = false,
+                    RequirePkce = true,
+                    AllowedCorsOrigins = {"https://clientapp321.azurewebsites.net"},
+                    AllowedGrantTypes = GrantTypes.Code,
 
                     AllowedScopes =
                     {
                         "ApiOne", IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile
                     },
-                    RedirectUris = {"https://localhost:44328/signin-oidc"},
+
+                    RedirectUris = {"https://clientapp321.azurewebsites.net/callback"},
+                    PostLogoutRedirectUris = {"https://clientapp321.azurewebsites.net/logout"},
 
                     RequireConsent = false
                 }
